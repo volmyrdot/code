@@ -60,10 +60,10 @@ class Solution {
     public int[] findOrder(int numCourses, int[][] prerequisites) {
         init(numCourses, prerequisites);
 
-        // If the node is unprocessed, then call dfs on it.
         for (int i = 0; i < numCourses; i++) {
             if (cycled) break;
             if (nodeStates.get(i) == NodeState.UNVISITED) {
+                // If the node is unprocessed, then call dfs on it.x
                 dfs(i);
             }
         }
@@ -81,11 +81,13 @@ class Solution {
     }
 
     private void dfs(int node) {
-        nodeStates.put(node, NodeState.PROCESSING);
-
+        // Don't recurse further if we found a cycle already
         if (cycled) {
             return;
         }
+
+        // Start the recursion
+        nodeStates.put(node, NodeState.PROCESSING);
 
         for (int n : adjList.getOrDefault(node, new ArrayList<>())) {
             if (nodeStates.get(n) == NodeState.UNVISITED) {
@@ -94,6 +96,7 @@ class Solution {
                 cycled = true;
             }
         }
+        // Recursion ends. We mark it as VISITED
         nodeStates.put(node, NodeState.VISITED);
         topologicalOrder.add(node);
     }
